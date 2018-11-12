@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Embedded Stock";
+}
+
+<div style="margin: 50px auto; width:600px;">
+    <div id="btLoginContainer">
+        <input type="text" name="email" id="username" placeholder="email" />
+        <input type="password" name="password" id="password" placeholder="Password" />
+        <button id="btLogin">Login</button><br>
+        <label>(Use email as username)</label>
+    </div>
+    <div id="btLogoutContainer">
+        <button id="btLogout">Logout</button>
+    </div>
+    <div id="btReservationContainer">
+        <label>Action that requires the user to be authenticated: </label>
+        <label>Location:</label>
+        <input type="text" name="location" id="location" placeholder="Room to reserve" />
+        <button id="btBookLocation">Book location</button>
+    </div>
+</div>
+<div style="margin: 50px; background: lightgray" id="responseContainer">
+
+</div>
