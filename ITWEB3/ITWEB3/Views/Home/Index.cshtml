@@ -42,7 +42,7 @@
         $(function () {
             $('#btLogin').click(function () {
                 $.ajax({
-                    url: "/account/jwtlogin",
+                    url: "/api/account/jwtlogin",
                     contentType: "application/json",
                     method: "POST",
                     data: JSON.stringify({
