@@ -30,3 +30,8 @@ C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\net
 C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\ITWEB3.dll
 C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\ITWEB3.pdb
 C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\ITWEB3.csproj.CopyComplete
+C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\Razor\Views\Components\Create.g.cshtml.cs
+C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\Razor\Views\Components\Delete.g.cshtml.cs
+C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\Razor\Views\Components\Details.g.cshtml.cs
+C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\Razor\Views\Components\Edit.g.cshtml.cs
+C:\Users\Dan\OneDrive\Skole\7. Semester\ITWEB\ITWEB3\ITWEB3\ITWEB3\obj\Debug\netcoreapp2.1\Razor\Views\Components\Index.g.cshtml.cs

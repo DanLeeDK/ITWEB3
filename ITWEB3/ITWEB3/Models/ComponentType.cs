@@ -9,7 +9,7 @@ namespace ITWEB3.Models
             Components = new List<Component>();
             ComponentTypeCategories = new List<ComponentTypeCategory>();
         }
-        public long ComponentTypeId { get; set; }
+        public int ComponentTypeId { get; set; }
         public string ComponentName { get; set; }
         public string ComponentInfo { get; set; }
         public string Location { get; set; }

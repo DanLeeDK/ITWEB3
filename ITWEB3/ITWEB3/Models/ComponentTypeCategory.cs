@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,10 +8,9 @@ namespace ITWEB3.Models
 {
     public class ComponentTypeCategory
     {
-        public int ID { get; set; }
-        public int ComponentTypeID { get; set; }
+        public int ComponentTypeId { get; set; }
         public ComponentType ComponentType { get; set; }
-        public int CategoryID { get; set; }
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ITWEB3.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,6 @@ namespace ITWEB3.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -187,7 +186,7 @@ namespace ITWEB3.Migrations
                 name: "ComponentTypes",
                 columns: table => new
                 {
-                    ComponentTypeId = table.Column<long>(nullable: false)
+                    ComponentTypeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ComponentName = table.Column<string>(nullable: true),
                     ComponentInfo = table.Column<string>(nullable: true),
@@ -223,44 +222,42 @@ namespace ITWEB3.Migrations
                     Status = table.Column<int>(nullable: false),
                     AdminComment = table.Column<string>(nullable: true),
                     UserComment = table.Column<string>(nullable: true),
-                    CurrentLoanInformationId = table.Column<long>(nullable: true)
+                    CurrentLoanInformationId = table.Column<long>(nullable: true),
+                    ComponentTypeId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Components", x => x.ComponentId);
                     table.ForeignKey(
-                        name: "FK_Components_ComponentTypes_ComponentTypeId",
-                        column: x => x.ComponentTypeId,
+                        name: "FK_Components_ComponentTypes_ComponentTypeId1",
+                        column: x => x.ComponentTypeId1,
                         principalTable: "ComponentTypes",
                         principalColumn: "ComponentTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ComponentTypeCategory",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ComponentTypeID = table.Column<int>(nullable: false),
-                    ComponentTypeId = table.Column<long>(nullable: true),
-                    CategoryID = table.Column<int>(nullable: false)
+                    ComponentTypeId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComponentTypeCategory", x => x.ID);
+                    table.PrimaryKey("PK_ComponentTypeCategory", x => new { x.CategoryId, x.ComponentTypeId });
                     table.ForeignKey(
-                        name: "FK_ComponentTypeCategory_Categories_CategoryID",
-                        column: x => x.CategoryID,
+                        name: "FK_ComponentTypeCategory_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ComponentTypeCategory_ComponentTypes_ComponentTypeId",
-                        column: x => x.ComponentTypeId,
+                        name: "FK_ComponentTypeCategory_ComponentTypes_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "ComponentTypes",
                         principalColumn: "ComponentTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -303,19 +300,9 @@ namespace ITWEB3.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Components_ComponentTypeId",
+                name: "IX_Components_ComponentTypeId1",
                 table: "Components",
-                column: "ComponentTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ComponentTypeCategory_CategoryID",
-                table: "ComponentTypeCategory",
-                column: "CategoryID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ComponentTypeCategory_ComponentTypeId",
-                table: "ComponentTypeCategory",
-                column: "ComponentTypeId");
+                column: "ComponentTypeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ComponentTypes_ImageESImageId",
