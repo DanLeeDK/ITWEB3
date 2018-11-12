@@ -6,11 +6,11 @@ namespace ITWEB3.Models
     {
         public Category()
         {
-            ComponentTypes = new List<ComponentType>();
+            ComponentTypeCategories = new List<ComponentTypeCategory>();
         }
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public ICollection<ComponentType> ComponentTypes
+        public ICollection<ComponentTypeCategory> ComponentTypeCategories
         {
             get; protected set;
         }
