@@ -22,3 +22,79 @@
 <div style="margin: 50px; background: lightgray" id="responseContainer">
 
 </div>
+<script>
+        function isUserLoggedIn() {
+            return localStorage.getItem("token") !== null;
+        }
+
+        function getSavedToken() {
+            return localStorage.getItem("token");
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                if (isUserLoggedIn()) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + getSavedToken());
+                }
+            }
+        });
+
+        $(function () {
+            $('#btLogin').click(function () {
+                $.ajax({
+                    url: "/account/jwtlogin",
+                    contentType: "application/json",
+                    method: "POST",
+                    data: JSON.stringify({
+                        email: $('#username').val(),
+                        password: $('#password').val()
+                    })
+                })
+                    .done(function (token) {
+                        localStorage.setItem("token", token);
+                        $('#btLoginContainer').hide();
+                        $('#btLogoutContainer').show();
+                        var message = "<p>Token received and saved in local storage under the key 'token'</p>";
+                        message += "<p>Token Value: </p><p style='word-wrap:break-word'>" + token + "</p>";
+                        $('#responseContainer').html(message);
+                    })
+                    .fail(handleError);
+            });
+
+            $('#btLogout').click(function () {
+                localStorage.removeItem("token");
+                $('#btLogoutContainer').hide();
+                $('#btLoginContainer').show();
+                $('#responseContainer').html("<p>Token deleted from local storage</p>");
+            });
+
+            $('#btBookLocation').click(function () {
+                $.ajax({
+                    url: "api/booking",
+                    contentType: "application/json",
+                    method: "POST",
+                    data: JSON.stringify({
+                        location: $('#location').val()
+                    })
+                })
+                    .done(function (data) {
+                        addTableRow(data);
+                    })
+                    .fail(handleError)
+            });
+
+            var addTableRow = function (reservation) {
+                $("table tbody").append("<tr><td>" + reservation.reservationId + "</td><td>"
+                    + reservation.client.name + "</td><td>"
+                    + reservation.location + "</td></tr>");
+            }
+
+            if (isUserLoggedIn()) {
+                $('#btLoginContainer').hide();
+                $('#btLogoutContainer').show();
+            } else {
+                $('#btLoginContainer').show();
+                $('#btLogoutContainer').hide();
+            }
+        });
+</script>

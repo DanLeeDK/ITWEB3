@@ -1,93 +1,114 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using ITWEB3.Controllers.DAL;
+using ITWEB3.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ITWEB3.Controllers
 {
+    [Produces("application/json")]
+    [Route("api/Account")]
     public class AccountController : Controller
     {
-        // GET: Account
-        public ActionResult Index()
+        private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+
+        public AccountController(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            return View();
+            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        // GET: Account/Details/5
-        public ActionResult Details(int id)
+        [HttpPost("Register")]
+        //public async Task<IActionResult> Register([FromBody] string email, [FromBody] string password, [FromBody] string name)
+        public async Task<IActionResult> Register([FromBody] DtoUser dtoUser)
         {
-            return View();
-        }
-
-        // GET: Account/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Account/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            var newUser = new ApplicationUser
             {
-                // TODO: Add insert logic here
+                UserName = dtoUser.Email,
+                Email = dtoUser.Email,
+                Name = dtoUser.Name,
+            };
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            var userCreationResult = await _userManager.CreateAsync(newUser, dtoUser.Password);
+            if (userCreationResult.Succeeded)
             {
-                return View();
+                return Ok(newUser);
             }
+            foreach (var error in userCreationResult.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return BadRequest(ModelState);
         }
 
-        // GET: Account/Edit/5
-        public ActionResult Edit(int id)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody]DtoUser dtoUser)
         {
-            return View();
+            //var user = await _userManager.FindByEmailAsync(email);
+            //if (user == null)
+            //{
+            //    ModelState.AddModelError(string.Empty, "Invalid login");
+            //    return BadRequest(ModelState);
+            //}
+
+            var passwordSignInResult = await _signInManager.PasswordSignInAsync(dtoUser.Email, dtoUser.Password, isPersistent: false, lockoutOnFailure: false);
+            if (passwordSignInResult.Succeeded)
+            {
+                return Ok();
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login");
+            return BadRequest(ModelState);
         }
 
-        // POST: Account/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await _signInManager.SignOutAsync();
+            return Ok();
         }
 
-        // GET: Account/Delete/5
-        public ActionResult Delete(int id)
+        [HttpPost("jwtlogin")]
+        public async Task<IActionResult> JWTlogin([FromBody]DtoUser dtoUser)
         {
-            return View();
+            var user = await _userManager.FindByEmailAsync(dtoUser.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login");
+                return BadRequest(ModelState);
+            }
+            var passwordSignInResult = await _signInManager.CheckPasswordSignInAsync(user, dtoUser.Password, false);
+            if (passwordSignInResult.Succeeded)
+                return new ObjectResult(GenerateToken(dtoUser.Email));
+            return BadRequest("Invalid login");
         }
 
-        // POST: Account/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        private string GenerateToken(string username)
         {
-            try
+            var claims = new Claim[]
             {
-                // TODO: Add delete logic here
+                new Claim(ClaimTypes.Name, username),
+                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+            };
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var token = new JwtSecurityToken(
+                new JwtHeader(new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("the secret that needs to be at least 16 characeters long for HmacSha256")),
+                                             SecurityAlgorithms.HmacSha256)),
+                new JwtPayload(claims));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
