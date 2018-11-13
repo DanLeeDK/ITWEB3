@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WEBAfl3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WEBAfl3.Data.Repository;
 
 namespace WEBAfl3
 {
@@ -37,9 +38,6 @@ namespace WEBAfl3
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDefaultIdentity<IdentityUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -55,6 +53,10 @@ namespace WEBAfl3
                 options.Password.RequireUppercase = false;
             });
 
+            services.AddTransient<IComponentRepository, ComponentRepository>();
+            services.AddTransient<IComponentTypeRepository, ComponentTypeRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddAuthorization(options =>
@@ -64,7 +66,7 @@ namespace WEBAfl3
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -96,6 +98,10 @@ namespace WEBAfl3
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            DbInitializer.Initializer(dbContext);
+
 
             CreateRoles(serviceProvider).Wait();
         }

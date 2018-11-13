@@ -1,0 +1,22 @@
+﻿@model System.Collections.Generic.List<WEBAfl3.Models.Component>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Serial number</th>
+        <th>Status</th>
+        <th>User comment</th>
+        <th>Admin comment</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var component in Model)
+        {
+            <tr>
+                <td>@component.SerialNo</td>
+                <td>@component.Status</td>
+                <td>@component.UserComment</td>
+                <td>@component.AdminComment</td>
+            </tr>
+        }
+    </tbody>
+</table>

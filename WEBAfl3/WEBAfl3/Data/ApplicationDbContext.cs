@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WEBAfl3.Models;
 
@@ -34,7 +31,7 @@ namespace WEBAfl3.Data
         public DbSet<Component> Components { get; set; }
         public DbSet<ComponentType> ComponentTypes { get; set; }
         public DbSet<ESImage> ESImages { get; set; }
+        public DbSet<ComponentTypeCategory> CategoryComponentTypes { get; set; }
 
-        public DbSet<DtoUserRegistration> DtoUserRegistration { get; set; }
     }
 }

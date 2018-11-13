@@ -1,16 +1,20 @@
 ﻿@model WEBAfl3.Models.Category
-
 @{
     ViewData["Title"] = "Edit";
 }
-
+<style>
+    .selectSection {
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+</style>
 <h2>Edit</h2>
-
 <h4>Category</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="submitForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CategoryId" />
             <div class="form-group">
@@ -18,17 +22,60 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <div class="form-group" style="text-align: center">
+                <section class="container row">
+                    <div class="col-md-2">
+                        <label class="control-label selectSection">Valgte typer</label>
+                        <select class="form-control selectSection" style="width: 100px" id="leftValues" name="leftValues" size="5" multiple asp-items="@(new SelectList(@ViewBag.TypesOfCateogry, "ComponentTypeId", "ComponentName"));"></select>
+                    </div>
+                    <div class="col-md-1">
+                        <input style="margin-top: 40px" class="form-control selectSection" type="button" id="btnLeft" value="&lt;&lt;" />
+                        <input class="form-control selectSection" type="button" id="btnRight" value="&gt;&gt;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label selectSection"> Mulige typer</label>
+                        <select class="form-control selectSection" style="width: 100px" id="rightValues" name="rightValues" size="5" multiple asp-items="@(new SelectList(@ViewBag.TypesAvailable, "ComponentTypeId", "ComponentName"));"></select>
+                    </div>
+                </section>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $("#btnLeft").click(function() {
+        var selectedItem = $("#rightValues option:selected");
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        $("#leftValues").append(selectedItem);
+    });
+
+    $("#btnRight").click(function () {
+        var selectedItem = $("#leftValues option:selected");
+        $("#rightValues").append(selectedItem);
+    });
+
+    $("#rightValues").change(function () {
+        var selectedItem = $("#rightValues option:selected");
+        $("#txtRight").val(selectedItem.text());
+    });
+
+    $("#submitForm").submit(function (eventObj) {
+        var arr = [];
+        $("#leftValues option").each(function () {
+            arr.push($(this).val());
+        });
+
+        $('<input />').attr('type', 'hidden')
+            .attr('name', "types")
+            .attr('value', arr)
+            .appendTo('#submitForm');
+        return true;
+    });
+
+</script>

@@ -4,13 +4,21 @@
     ViewData["Title"] = "Create";
 }
 
+<style>
+    .selectSection {
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+</style>
+
 <h2>Create</h2>
 
 <h4>ComponentType</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="submitForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ComponentName" class="control-label"></label>
@@ -29,7 +37,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" asp-items="Html.GetEnumSelectList<ComponentStatus>()"></select>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ComponentStatus>()"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Datasheet" class="control-label"></label>
@@ -56,6 +65,30 @@
                 <input asp-for="AdminComment" class="form-control" />
                 <span asp-validation-for="AdminComment" class="text-danger"></span>
             </div>
+            <div class="form-group" style="text-align: center">
+                <section class="container row">
+                    <div class="col-md-2">
+                        <label class="control-label selectSection">Valgte Kategorier</label>
+                        <select class="form-control selectSection" style="width: 100px" id="leftValues" name="leftValues" size="5" multiple></select>
+                    </div>
+                    <div class="col-md-1">
+                        <input style="margin-top: 40px" class="form-control selectSection" type="button" id="btnLeft" value="&lt;&lt;" />
+                        <input class="form-control selectSection" type="button" id="btnRight" value="&gt;&gt;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label selectSection"> Mulige Kategoier</label>
+                        <select class="form-control selectSection" style="width: 100px" id="rightValues" name="rightValues" size="5" multiple asp-items="@(new SelectList(@ViewBag.AllCategories, "CategoryId", "Name"));"></select>
+                    </div>
+                </section>
+            </div>
+            <div class="form-group" style="text-align: center">
+                <section class="container row">
+                    <div class="col-md-2">
+                        <label class="control-label selectSection">Valgte Komponenter</label>
+                        <select class="form-control selectSection" style="width: 100px" id="leftComponents" name="leftComponents" size="5" multiple></select>
+                    </div>
+                </section>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -67,6 +100,32 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $("#btnLeft").click(function() {
+        var selectedItem = $("#rightValues option:selected");
+
+        $("#leftValues").append(selectedItem);
+    });
+
+    $("#btnRight").click(function () {
+        var selectedItem = $("#leftValues option:selected");
+        $("#rightValues").append(selectedItem);
+    });
+
+    $("#submitForm").submit(function (eventObj) {
+        var categoryArr = [];
+        var componentArray = [];
+        $("#leftValues option").each(function () {
+            categoryArr.push($(this).val());
+        });
+
+        $('<input />').attr('type', 'hidden')
+            .attr('name', "categories")
+            .attr('value', categoryArr)
+            .appendTo('#submitForm');
+        return true;
+    });
+
+</script>
+

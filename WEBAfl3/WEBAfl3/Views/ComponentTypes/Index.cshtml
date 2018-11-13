@@ -12,33 +12,33 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ComponentName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ComponentInfo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Datasheet)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Manufacturer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WikiLink)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdminComment)
-            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ComponentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ComponentInfo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Datasheet)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Manufacturer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WikiLink)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdminComment)
+                </th>
             <th></th>
         </tr>
     </thead>
@@ -75,7 +75,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ComponentTypeId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ComponentTypeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ComponentTypeId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ComponentTypeId">Delete</a> |
+                <a asp-action="TypeList" asp-controller="ComponentTypes" asp-route-typeId="@item.ComponentTypeId">Show Component list</a>
             </td>
         </tr>
 }

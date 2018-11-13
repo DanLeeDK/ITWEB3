@@ -12,36 +12,30 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ComponentTypeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ComponentNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SerialNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdminComment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserComment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrentLoanInformationId)
-            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ComponentNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SerialNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdminComment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserComment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrentLoanInformationId)
+                </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ComponentTypeId)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ComponentNumber)
             </td>

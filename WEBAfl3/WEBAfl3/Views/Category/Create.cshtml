@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    .selectSection {
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+</style>
 
 <h2>Create</h2>
 
@@ -10,12 +17,30 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id ="submitForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="text-align: center">
+                <section class="container row">
+                    <div class="col-md-2">
+                        <label class="control-label selectSection">Valgte typer</label>
+                        <select class="form-control selectSection" style="width: 100px" id="leftValues" name="leftValues" size="5" multiple>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <input style="margin-top: 40px" class="form-control selectSection" type="button" id="btnLeft" value="&lt;&lt;"/>
+                        <input class="form-control selectSection" type="button" id="btnRight" value="&gt;&gt;"/>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label selectSection"> Mulige typer</label>
+                        <select class="form-control selectSection" style="width: 100px" id="rightValues" name="rightValues" size="5" multiple asp-items="@(new SelectList(@ViewBag.AllTypes, "ComponentTypeId", "ComponentName"));">
+                        </select>
+                    </div>
+                </section>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -28,6 +53,37 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $("#btnLeft").click(function() {
+        var selectedItem = $("#rightValues option:selected");
+
+        $("#leftValues").append(selectedItem);
+    });
+
+    $("#btnRight").click(function () {
+        var selectedItem = $("#leftValues option:selected");
+        $("#rightValues").append(selectedItem);
+    });
+
+    $("#rightValues").change(function () {
+        var selectedItem = $("#rightValues option:selected");
+        $("#txtRight").val(selectedItem.text());
+    });
+
+    $("#submitForm").submit(function (eventObj) {
+        var arr = [];    
+        $("#leftValues option").each(function () {    
+            arr.push($(this).val());    
+        });   
+
+        $('<input />').attr('type', 'hidden')
+            .attr('name', "types")
+            .attr('value', arr)
+            .appendTo('#submitForm');
+        return true;
+    });
+
+</script>
+
+

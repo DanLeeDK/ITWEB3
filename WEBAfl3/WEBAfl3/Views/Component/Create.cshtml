@@ -14,8 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ComponentTypeId" class="control-label"></label>
-                <input asp-for="ComponentTypeId" class="form-control" />
-                <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
+                <select asp-for="ComponentTypeId" class ="form-control" asp-items="@(new SelectList(@ViewBag.types, "ComponentTypeId", "ComponentName"))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ComponentNumber" class="control-label"></label>
@@ -29,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ComponentStatus>()"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,11 +40,6 @@
                 <label asp-for="UserComment" class="control-label"></label>
                 <input asp-for="UserComment" class="form-control" />
                 <span asp-validation-for="UserComment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentLoanInformationId" class="control-label"></label>
-                <input asp-for="CurrentLoanInformationId" class="form-control" />
-                <span asp-validation-for="CurrentLoanInformationId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

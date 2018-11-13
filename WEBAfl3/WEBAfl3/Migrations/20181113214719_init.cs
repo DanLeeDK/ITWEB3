@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WEBAfl3.Data.Migrations
+namespace WEBAfl3.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,6 +45,34 @@ namespace WEBAfl3.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ESImages",
+                columns: table => new
+                {
+                    ESImageId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ImageMimeType = table.Column<string>(maxLength: 128, nullable: true),
+                    Thumbnail = table.Column<byte[]>(nullable: true),
+                    ImageData = table.Column<byte[]>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ESImages", x => x.ESImageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,8 +121,8 @@ namespace WEBAfl3.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -138,8 +166,8 @@ namespace WEBAfl3.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -151,6 +179,84 @@ namespace WEBAfl3.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ComponentTypes",
+                columns: table => new
+                {
+                    ComponentTypeId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ComponentName = table.Column<string>(nullable: true),
+                    ComponentInfo = table.Column<string>(nullable: true),
+                    Location = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Datasheet = table.Column<string>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    Manufacturer = table.Column<string>(nullable: true),
+                    WikiLink = table.Column<string>(nullable: true),
+                    AdminComment = table.Column<string>(nullable: true),
+                    ImageESImageId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComponentTypes", x => x.ComponentTypeId);
+                    table.ForeignKey(
+                        name: "FK_ComponentTypes_ESImages_ImageESImageId",
+                        column: x => x.ImageESImageId,
+                        principalTable: "ESImages",
+                        principalColumn: "ESImageId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryComponentTypes",
+                columns: table => new
+                {
+                    ComponentTypeId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryComponentTypes", x => new { x.CategoryId, x.ComponentTypeId });
+                    table.ForeignKey(
+                        name: "FK_CategoryComponentTypes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryComponentTypes_ComponentTypes_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "ComponentTypes",
+                        principalColumn: "ComponentTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Components",
+                columns: table => new
+                {
+                    ComponentId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ComponentTypeId = table.Column<long>(nullable: false),
+                    ComponentNumber = table.Column<int>(nullable: false),
+                    SerialNo = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    AdminComment = table.Column<string>(nullable: true),
+                    UserComment = table.Column<string>(nullable: true),
+                    CurrentLoanInformationId = table.Column<long>(nullable: true),
+                    ComponentTypeId1 = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Components", x => x.ComponentId);
+                    table.ForeignKey(
+                        name: "FK_Components_ComponentTypes_ComponentTypeId1",
+                        column: x => x.ComponentTypeId1,
+                        principalTable: "ComponentTypes",
+                        principalColumn: "ComponentTypeId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -191,6 +297,16 @@ namespace WEBAfl3.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Components_ComponentTypeId1",
+                table: "Components",
+                column: "ComponentTypeId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComponentTypes_ImageESImageId",
+                table: "ComponentTypes",
+                column: "ImageESImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +327,25 @@ namespace WEBAfl3.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CategoryComponentTypes");
+
+            migrationBuilder.DropTable(
+                name: "Components");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "ComponentTypes");
+
+            migrationBuilder.DropTable(
+                name: "ESImages");
         }
     }
 }

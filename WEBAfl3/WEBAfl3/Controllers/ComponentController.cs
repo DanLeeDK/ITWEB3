@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WEBAfl3.Data;
+using WEBAfl3.Data.Repository;
 using WEBAfl3.Models;
 
 namespace WEBAfl3.Controllers
@@ -14,10 +14,12 @@ namespace WEBAfl3.Controllers
     public class ComponentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IComponentTypeRepository _componentTypeRepository;
 
-        public ComponentController(ApplicationDbContext context)
+        public ComponentController(IComponentTypeRepository componentTypeRepository, IServiceProvider serviceProvider)
         {
-            _context = context;
+            _context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            _componentTypeRepository = componentTypeRepository;
         }
 
         // GET: Component
@@ -48,6 +50,7 @@ namespace WEBAfl3.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            ViewBag.types = _componentTypeRepository.GetAll(); ViewBag.types = _componentTypeRepository.GetAll();
             return View();
         }
 

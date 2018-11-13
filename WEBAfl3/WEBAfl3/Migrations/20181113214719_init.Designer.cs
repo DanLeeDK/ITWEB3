@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WEBAfl3.Data;
 
-namespace WEBAfl3.Data.Migrations
+namespace WEBAfl3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181113103816_models")]
-    partial class models
+    [Migration("20181113214719_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,11 +138,9 @@ namespace WEBAfl3.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -173,11 +171,9 @@ namespace WEBAfl3.Data.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -269,26 +265,7 @@ namespace WEBAfl3.Data.Migrations
 
                     b.HasKey("CategoryId", "ComponentTypeId");
 
-                    b.ToTable("ComponentTypeCategory");
-                });
-
-            modelBuilder.Entity("WEBAfl3.Models.DtoUserRegistration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConfirmPassword");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Password");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DtoUserRegistration");
+                    b.ToTable("CategoryComponentTypes");
                 });
 
             modelBuilder.Entity("WEBAfl3.Models.ESImage", b =>

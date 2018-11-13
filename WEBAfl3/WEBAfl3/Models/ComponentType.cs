@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WEBAfl3.Models
 {
@@ -15,8 +16,10 @@ namespace WEBAfl3.Models
         public string Location { get; set; }
         public ComponentTypeStatus Status { get; set; }
         public string Datasheet { get; set; }
+        [Url]
         public string ImageUrl { get; set; }
         public string Manufacturer { get; set; }
+        [Url]
         public string WikiLink { get; set; }
         public string AdminComment { get; set; }
         public virtual ESImage Image { get; set; }

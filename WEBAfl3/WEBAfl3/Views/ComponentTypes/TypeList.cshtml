@@ -1,0 +1,23 @@
+﻿@model List<ComponentType>
+@{
+    ViewData["Title"] = "TypeList";
+}
+
+<h2>TypeList</h2>
+
+@foreach (var item in Model)
+{
+    <p>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ComponentName)
+            </td>
+        </tr>
+        <a asp-action="TypeList" asp-controller="ComponentTypes" asp-route-typeId="@item.ComponentTypeId" asp-route-id="@ViewBag.CategoryId">Show Component list</a>
+    </p>
+}
+
+<div>
+    @await Component.InvokeAsync("Result", new{typeId = @ViewBag.SelectedTypeId})
+</div>
+
