@@ -10,21 +10,39 @@ namespace WEBAfl3.Data
             : base(options)
         {
         }
+
+        public ApplicationDbContext(string connectionString) : base(GetOptions(connectionString))
+        { }
+
+        private static DbContextOptions GetOptions(string connectionString)
+        {
+            return new DbContextOptionsBuilder().UseSqlServer(connectionString)
+                .Options;
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            // One to Many
+            modelBuilder.Entity<Component>()
+                .HasOne(x => x.ComponentType)
+                .WithMany(x => x.Components)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Many to Many
             modelBuilder.Entity<ComponentTypeCategory>()
                 .HasKey(bc => new { bc.CategoryId, bc.ComponentTypeId });
 
             modelBuilder.Entity<ComponentTypeCategory>()
                 .HasOne(bc => bc.ComponentType)
                 .WithMany(b => b.ComponentTypeCategories)
-                .HasForeignKey(bc => bc.CategoryId);
+                .HasForeignKey(bc => bc.ComponentTypeId);
 
             modelBuilder.Entity<ComponentTypeCategory>()
                 .HasOne(bc => bc.Category)
                 .WithMany(c => c.ComponentTypeCategories)
                 .HasForeignKey(bc => bc.CategoryId);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Category> Categories { get; set; }

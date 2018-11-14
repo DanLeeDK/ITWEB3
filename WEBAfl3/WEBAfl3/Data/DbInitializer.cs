@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WEBAfl3.Models;
 
@@ -31,6 +32,20 @@ namespace WEBAfl3.Data
                 AdminComment = "User au593874 has it",
                 UserComment = "I'm keeping it"
             };
+            var component3 = new Component
+            {
+                ComponentNumber = 3,
+                SerialNo = "JK69",
+                Status = ComponentStatus.Loaned,
+                AdminComment = "Lots of fun",
+                UserComment = "Sure is"
+            };
+
+            context.Components.Add(component1);
+            context.Components.Add(component2);
+            context.Components.Add(component3);
+            context.SaveChanges();
+
             var image = new Byte[0];//System.IO.File.ReadAllBytes("resistor.jpg");
 
             var esimage = new ESImage{
@@ -38,33 +53,64 @@ namespace WEBAfl3.Data
                 Thumbnail = image,
                 ImageMimeType = "image/jpeg"
             };
-            var componenttype = new ComponentType
+
+            var componentType1 = new ComponentType
             {
                 ComponentName = "Resistor",
                 ComponentInfo = "Just a resistor",
-                Location = "in yer butt",
+                Location = "Shelf",
                 Status = ComponentTypeStatus.Available,
                 Datasheet = "data",
                 ImageUrl = "url",
                 Image = esimage,
-                Manufacturer = "Poul Ejnar A/S",
+                Manufacturer = "Hest og Co A/S",
                 WikiLink = "wikilink",
-                AdminComment = "comment"
+                AdminComment = "comment",
             };
-            componenttype.Components.Add(component1);
-            componenttype.Components.Add(component2);
+
+            var componentType2 = new ComponentType
+            {
+                ComponentName = "Pump",
+                ComponentInfo = "Just a pump",
+                Location = "Drawer 5",
+                Status = ComponentTypeStatus.Available,
+                Datasheet = "Push up 4 times",
+                ImageUrl = "url",
+                Image = esimage,
+                Manufacturer = "Fitness World",
+                WikiLink = "wikilink",
+                AdminComment = "Be careful if you don't want to be big",
+            };
+
+            componentType1.Components.Add(component1);
+            componentType1.Components.Add(component2);
+            context.ComponentTypes.Add(componentType1);
+
+            componentType2.Components.Add(component3);
+            context.ComponentTypes.Add(componentType2);
+            context.SaveChanges();
+
             var category = new Category
             {
                 Name = "Test"
             };
 
-            var categoryComponentType = new ComponentTypeCategory
+            var categoryComponentType1 = new ComponentTypeCategory
             {
                 Category = category,
-                ComponentType = componenttype
+                ComponentType = componentType1
             };
 
-            context.CategoryComponentTypes.Add(categoryComponentType);
+            var categoryComponentType2 = new ComponentTypeCategory
+            {
+                Category = category,
+                ComponentType = componentType2
+            };
+
+            category.ComponentTypeCategories.Add(categoryComponentType1);
+            category.ComponentTypeCategories.Add(categoryComponentType2);
+            context.Categories.Add(category);
+            //context.CategoryComponentTypes.Add(categoryComponentType);
             context.SaveChanges();
         }
     }

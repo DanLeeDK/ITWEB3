@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WEBAfl3.Data;
 using WEBAfl3.Data.Repository;
 using WEBAfl3.Models;
+using WEBAfl3.Models.ViewModel;
 
 namespace WEBAfl3.Controllers
 {
@@ -50,7 +52,8 @@ namespace WEBAfl3.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewBag.types = _componentTypeRepository.GetAll(); ViewBag.types = _componentTypeRepository.GetAll();
+            var allTypes = _componentTypeRepository.GetAll().ToList();
+            ViewBag.AllTypes = allTypes;
             return View();
         }
 
@@ -60,15 +63,29 @@ namespace WEBAfl3.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("ComponentId,ComponentTypeId,ComponentNumber,SerialNo,Status,AdminComment,UserComment,CurrentLoanInformationId")] Component component)
+        public async Task<IActionResult> Create([Bind("ComponentId,ComponentTypeId,ComponentNumber,SerialNo,Status,AdminComment,UserComment,CurrentLoanInformationId")] ComponentViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                var componentType = _componentTypeRepository.GetById(vm.ComponentTypeId);
+
+                var component = new Component
+                {
+                    ComponentType = componentType,
+                    AdminComment = vm.AdminComment,
+                    ComponentNumber = vm.ComponentNumber,
+                    CurrentLoanInformationId = vm.CurrentLoanInformationId,
+                    SerialNo = vm.SerialNo,
+                    Status = vm.Status,
+                    UserComment = vm.UserComment
+                };
+
                 _context.Add(component);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(component);
+            ViewBag.types = _componentTypeRepository.GetAll();
+            return View(vm);
         }
 
         // GET: Component/Edit/5

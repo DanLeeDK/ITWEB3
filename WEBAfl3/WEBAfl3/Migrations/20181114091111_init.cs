@@ -226,8 +226,8 @@ namespace WEBAfl3.Migrations
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoryComponentTypes_ComponentTypes_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_CategoryComponentTypes_ComponentTypes_ComponentTypeId",
+                        column: x => x.ComponentTypeId,
                         principalTable: "ComponentTypes",
                         principalColumn: "ComponentTypeId",
                         onDelete: ReferentialAction.Cascade);
@@ -240,13 +240,13 @@ namespace WEBAfl3.Migrations
                     ComponentId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ComponentTypeId = table.Column<long>(nullable: false),
+                    ComponentTypeId1 = table.Column<int>(nullable: true),
                     ComponentNumber = table.Column<int>(nullable: false),
                     SerialNo = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     AdminComment = table.Column<string>(nullable: true),
                     UserComment = table.Column<string>(nullable: true),
-                    CurrentLoanInformationId = table.Column<long>(nullable: true),
-                    ComponentTypeId1 = table.Column<int>(nullable: true)
+                    CurrentLoanInformationId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,7 +256,7 @@ namespace WEBAfl3.Migrations
                         column: x => x.ComponentTypeId1,
                         principalTable: "ComponentTypes",
                         principalColumn: "ComponentTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -297,6 +297,11 @@ namespace WEBAfl3.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryComponentTypes_ComponentTypeId",
+                table: "CategoryComponentTypes",
+                column: "ComponentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Components_ComponentTypeId1",

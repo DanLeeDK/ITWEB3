@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WEBAfl3.Models;
 
 namespace WEBAfl3.Data.Repository
@@ -28,7 +29,7 @@ namespace WEBAfl3.Data.Repository
 
         public IEnumerable<ComponentType> GetAll(Expression<Func<ComponentType, bool>> predicate) => _context.ComponentTypes.Where(predicate).AsEnumerable();
 
-        public ComponentType GetById(long id) => _context.ComponentTypes.FirstOrDefault(x => x.ComponentTypeId == id);
+        public ComponentType GetById(long id) => _context.ComponentTypes.Where(x => x.ComponentTypeId == id).Include(x => x.Components).SingleOrDefault();
 
         public void Remove(ComponentType component)
         {

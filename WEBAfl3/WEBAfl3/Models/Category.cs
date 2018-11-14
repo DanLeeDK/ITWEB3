@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WEBAfl3.Models
 {
@@ -8,6 +9,7 @@ namespace WEBAfl3.Models
         {
             ComponentTypeCategories = new List<ComponentTypeCategory>();
         }
+        [Key]
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public ICollection<ComponentTypeCategory> ComponentTypeCategories

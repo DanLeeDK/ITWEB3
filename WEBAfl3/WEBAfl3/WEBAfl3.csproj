@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Factory\" />
+    <Folder Include="Data\UnitOfWork\" />
     <Folder Include="Data\Repository\" />
     <Folder Include="ViewComponents\" />
   </ItemGroup>

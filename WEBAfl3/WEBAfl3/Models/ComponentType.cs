@@ -10,6 +10,7 @@ namespace WEBAfl3.Models
             Components = new List<Component>();
             ComponentTypeCategories = new List<ComponentTypeCategory>();
         }
+        [Key]
         public int ComponentTypeId { get; set; }
         public string ComponentName { get; set; }
         public string ComponentInfo { get; set; }

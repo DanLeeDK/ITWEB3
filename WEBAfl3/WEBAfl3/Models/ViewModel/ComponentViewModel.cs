@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace WEBAfl3.Models
+namespace WEBAfl3.Models.ViewModel
 {
-    public class Component
+    public class ComponentViewModel
     {
-        [Key]
         public long ComponentId { get; set; }
-        public ComponentType ComponentType { get; set; }
+        public long ComponentTypeId { get; set; }
         public int ComponentNumber { get; set; }
         public string SerialNo { get; set; }
         public ComponentStatus Status { get; set; }

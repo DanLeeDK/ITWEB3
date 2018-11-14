@@ -1,4 +1,4 @@
-﻿@model WEBAfl3.Models.Component
+﻿@model WEBAfl3.Models.ViewModel.ComponentViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ComponentTypeId" class="control-label"></label>
-                <select asp-for="ComponentTypeId" class ="form-control" asp-items="@(new SelectList(@ViewBag.types, "ComponentTypeId", "ComponentName"))"></select>
+                <select asp-for="ComponentTypeId" class="form-control" asp-items="@(new SelectList(@ViewBag.AllTypes, "ComponentTypeId", "ComponentName"))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ComponentNumber" class="control-label"></label>

@@ -35,10 +35,13 @@ namespace WEBAfl3.Controllers
 
             ViewBag.CategoryId = id;
             ViewBag.SelectedTypeId = (int)typeId;
-            return View(await _context.CategoryComponentTypes
-                .Where(cc => cc.CategoryId == id)
-                .Select(cc => cc.ComponentType)
-                .ToListAsync());
+            var list = await _context.CategoryComponentTypes
+                .Where(x => x.CategoryId == id)
+                .Include(x => x.ComponentType)
+                .Select(x => x.ComponentType)
+                .ToListAsync();
+
+            return View(list);
         }
 
 
@@ -115,7 +118,7 @@ namespace WEBAfl3.Controllers
             }
 
             var componentType = await _context.ComponentTypes.SingleOrDefaultAsync(m => m.ComponentTypeId == id);
-            var componentsOfType = await _context.Components.Where(c => c.ComponentTypeId == id).ToListAsync();
+            var componentsOfType = await _context.Components.Where(c => c.ComponentType.ComponentTypeId == id).ToListAsync();
             ViewBag.ComponentsOfType = componentsOfType;
 
             var categoriesOfType = await _context.CategoryComponentTypes

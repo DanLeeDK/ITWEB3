@@ -10,7 +10,7 @@ using WEBAfl3.Data;
 namespace WEBAfl3.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181113214719_init")]
+    [Migration("20181114091111_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -265,6 +265,8 @@ namespace WEBAfl3.Migrations
 
                     b.HasKey("CategoryId", "ComponentTypeId");
 
+                    b.HasIndex("ComponentTypeId");
+
                     b.ToTable("CategoryComponentTypes");
                 });
 
@@ -333,9 +335,10 @@ namespace WEBAfl3.Migrations
 
             modelBuilder.Entity("WEBAfl3.Models.Component", b =>
                 {
-                    b.HasOne("WEBAfl3.Models.ComponentType")
+                    b.HasOne("WEBAfl3.Models.ComponentType", "ComponentType")
                         .WithMany("Components")
-                        .HasForeignKey("ComponentTypeId1");
+                        .HasForeignKey("ComponentTypeId1")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("WEBAfl3.Models.ComponentType", b =>
@@ -354,7 +357,7 @@ namespace WEBAfl3.Migrations
 
                     b.HasOne("WEBAfl3.Models.ComponentType", "ComponentType")
                         .WithMany("ComponentTypeCategories")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("ComponentTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

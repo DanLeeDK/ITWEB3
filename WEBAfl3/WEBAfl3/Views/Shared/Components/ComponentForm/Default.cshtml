@@ -1,27 +1,9 @@
 ﻿@model WEBAfl3.Models.Component
 
-@*public long ComponentId { get; set; }
-public long ComponentTypeId { get; set; }
-public int ComponentNumber { get; set; }
-public string SerialNo { get; set; }
-public ComponentStatus Status { get; set; }
-public string AdminComment { get; set; }
-public string UserComment { get; set; }
-public long? CurrentLoanInformationId { get; set; }*@
-
 <form asp-controller="">
-    @*<div class="form-group">
-        <label for="componentTypeId">Component Type ID</label>
-        <input type="text"/>
-    </div>*@
-    @*<select class="form-control">
-        @foreach (var type in ViewBag.types)
-        {
-            <option>@type.ComponentName</option>
-        }
-    </select>*@
+
     <div class="form-control">
-        <select asp-for="ComponentTypeId" asp-items="@(new SelectList(@ViewBag.types, "ComponentTypeId", "ComponentName"))"></select>
+        <select asp-for="ComponentType.ComponentTypeId" asp-items="@(new SelectList(@ViewBag.AllTypes, "ComponentTypeId", "ComponentName"))"></select>
     </div>
     <div class="form-group">
         <label asp-for="ComponentNumber">Component number</label>

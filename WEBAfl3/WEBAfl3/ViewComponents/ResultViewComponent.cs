@@ -5,19 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 using WEBAfl3.Data.Repository;
 using WEBAfl3.Models;
 
-namespace ITWEBExercise5.ViewComponents
+namespace WEBAfl3.ViewComponents
 {
     public class ResultViewComponent : ViewComponent
     {
-        private readonly IComponentRepository _componentDb;
-        private readonly ICategoryRepository _categoryDb;
-        private readonly IComponentTypeRepository _typeDb;
-
-        public ResultViewComponent(IComponentRepository compDb, ICategoryRepository catDb, IComponentTypeRepository typeDb)
+        private readonly IComponentRepository _componentRepository;
+        private readonly IComponentTypeRepository _componentTypeRepository;
+       
+        public ResultViewComponent(IComponentRepository componentRepository, IComponentTypeRepository componentTypeRepository)
         {
-            _componentDb = compDb;
-            _categoryDb = catDb;
-            _typeDb = typeDb;
+            _componentRepository = componentRepository;
+            _componentTypeRepository = componentTypeRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(int typeId)
@@ -35,7 +33,10 @@ namespace ITWEBExercise5.ViewComponents
             // If searching by type
             if (typeId != 0)
             {
-                var co = _componentDb.GetAll().Where(c => c.ComponentTypeId == typeId).ToAsyncEnumerable().ToList();
+                var componentType = _componentTypeRepository.GetById(typeId);
+
+
+                var co = componentType.Components.ToAsyncEnumerable().ToList(); //_componentRepository.GetAll().Where(c => c.ComponentType.ComponentTypeId == typeId).ToAsyncEnumerable().ToList();
                 return co;
             }
             // If searching by category

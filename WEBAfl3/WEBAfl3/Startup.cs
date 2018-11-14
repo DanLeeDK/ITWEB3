@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WEBAfl3.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WEBAfl3.Data.Factory;
 using WEBAfl3.Data.Repository;
 
 namespace WEBAfl3
@@ -35,9 +36,10 @@ namespace WEBAfl3
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var connectionString = "ConnectionString";
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString(connectionString)));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -59,10 +61,7 @@ namespace WEBAfl3
 
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            });
+            services.AddSingleton<IFactory, Factory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
